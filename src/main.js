@@ -3,17 +3,24 @@ import './style.css';
 const toggle = document.querySelector('.nav-toggle');
 const mobile = document.getElementById('nav-mobile');
 
+function setMenuOpen(open) {
+  mobile.classList.toggle('open', open);
+  toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  mobile.setAttribute('aria-hidden', open ? 'false' : 'true');
+  document.body.classList.toggle('menu-open', open);
+}
+
 if (toggle && mobile) {
   toggle.addEventListener('click', () => {
-    const open = mobile.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    setMenuOpen(!mobile.classList.contains('open'));
   });
 
   mobile.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      mobile.classList.remove('open');
-      toggle.setAttribute('aria-expanded', 'false');
-    });
+    link.addEventListener('click', () => setMenuOpen(false));
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setMenuOpen(false);
   });
 }
 
